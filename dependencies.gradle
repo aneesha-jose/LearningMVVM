@@ -23,6 +23,7 @@ ext.versions = [
         glideOkhttp3       : '4.7.1',
 
         //Retrofit
+        gson               : '2.8.5',
         retrofit           : '2.7.2',
         okHttp             : '4.4.0',
 
