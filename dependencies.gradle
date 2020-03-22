@@ -1,0 +1,36 @@
+ext.versions = [
+
+        appCompat          : '1.1.0',
+
+        cardview           : '1.0.0',
+
+        recyclerview       : '1.1.0',
+
+        swiperefreshlayout : '1.0.0',
+
+        genericadapters    : '1.0',
+
+        shimmer            : '0.5.0',
+
+        lifecycleVersion   : '2.2.0',
+
+        dagger             : '2.27',
+
+        butterKnife        : '10.2.1',
+
+        //Glide
+        glide              : '4.8.0',
+        glideOkhttp3       : '4.7.1',
+
+        //Retrofit
+        retrofit           : '2.7.2',
+        okHttp             : '4.4.0',
+
+        room               : '2.2.5',
+
+        timber             : '4.7.1',
+
+        //Testing
+        archVersion        : '2.1.0'
+
+]
