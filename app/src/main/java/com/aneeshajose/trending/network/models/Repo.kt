@@ -2,7 +2,7 @@ package com.aneeshajose.trending.network.models
 
 import android.os.Parcelable
 import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.aneeshajose.trending.common.TABLE_REPOSITORY
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -10,10 +10,8 @@ import kotlinx.android.parcel.Parcelize
  * The Repository object with relevant information about it.
  */
 @Parcelize
-@Entity
-data class Repository(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long,
+@Entity(tableName = TABLE_REPOSITORY)
+data class Repo(
     val author: String?,
     val name: String?,
     val avatar: String?,
@@ -21,5 +19,6 @@ data class Repository(
     val language: String?,
     val languageColor: String?,
     val stars: Long?,
-    val forks: Long?
+    val forks: Long?,
+    val createdDate: Long = System.currentTimeMillis()
 ) : Parcelable
