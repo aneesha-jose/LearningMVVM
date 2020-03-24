@@ -1,7 +1,10 @@
 package com.aneeshajose.trending.network.utils
 
-import androidx.core.util.Consumer
-
+import com.aneeshajose.trending.network.ApiCallTag
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,20 +17,32 @@ import retrofit2.Response
 /**
  *
  */
-fun <T> makeNetworkCall(call: Call<T>, onSuccess: Consumer<T>, onFailure: Consumer<String>, onError: Consumer<Throwable>? = null ){
-    call.enqueue(object : Callback<T>{
+fun <T> makeNetworkCall(
+    call: Call<T>,
+    @ApiCallTag apiCallTag: String,
+    onSuccess: NetworkResponse<T>,
+    onFailure: NetworkResponse<String>,
+    onError: NetworkResponse<Throwable>? = null
+) {
+    GlobalScope.launch(Dispatchers.IO) {
+        call.enqueue(object : Callback<T> {
 
-        override fun onResponse(call: Call<T>, response: Response<T>) {
-            if(response.isSuccessful) {
-                onSuccess.accept(response.body())
-            } else {
-                onFailure.accept(response.message())
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                if (response.isSuccessful) {
+                    onSuccess.onNetworkResponse(response.body(), apiCallTag)
+                } else {
+                    onFailure.onNetworkResponse(response.message(), apiCallTag)
+                }
             }
-        }
 
-        override fun onFailure(call: Call<T>, t: Throwable) {
-            onError?.accept(t)
-        }
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                onError?.onNetworkResponse(t, apiCallTag)
+            }
 
-    })
+        })
+    }
+}
+
+interface NetworkResponse<T> {
+    fun onNetworkResponse(t: T?, @ApiCallTag callTag: String)
 }

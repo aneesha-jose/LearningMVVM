@@ -1,6 +1,6 @@
 package com.aneeshajose.trending.network
 
-import com.aneeshajose.trending.network.models.Repository
+import com.aneeshajose.trending.models.Repo
 import retrofit2.Call
 import retrofit2.http.GET
 
@@ -10,6 +10,6 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("repositories")
-    fun getRepositories(): Call<List<Repository?>?>
+    fun fetchRepositories(): Call<List<Repo?>?>
 
 }
