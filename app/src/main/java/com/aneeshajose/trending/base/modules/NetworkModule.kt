@@ -41,7 +41,4 @@ class NetworkModule {
         return restClient.createApiService()
     }
 
-
-
-
 }

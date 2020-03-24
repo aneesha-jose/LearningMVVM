@@ -1,4 +1,4 @@
-package com.aneeshajose.trending.network.models
+package com.aneeshajose.trending.models
 
 import android.os.Parcelable
 import androidx.room.Entity
