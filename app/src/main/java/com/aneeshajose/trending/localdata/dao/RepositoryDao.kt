@@ -1,4 +1,4 @@
-package com.aneeshajose.trending.localdata
+package com.aneeshajose.trending.localdata.dao
 
 import androidx.room.Dao
 import androidx.room.Query

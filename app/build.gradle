@@ -64,12 +64,15 @@ dependencies {
     //Retrofit
     implementation "com.google.code.gson:gson:$versions.gson"
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
 
     //Room
     implementation "androidx.room:room-runtime:$versions.room"
     kapt "androidx.room:room-compiler:$versions.room"
+
+    //coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutineCore"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutineAndroid"
 
     //Timber
     implementation "com.jakewharton.timber:timber:$versions.timber"

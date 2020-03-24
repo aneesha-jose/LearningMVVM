@@ -29,9 +29,13 @@ ext.versions = [
 
         room               : '2.2.5',
 
+        //Coroutines
+        coroutineCore      : '1.3.5',
+        coroutineAndroid   : '1.3.5',
+
         timber             : '4.7.1',
 
         //Testing
-        archVersion        : '2.1.0'
+        archVersion        : '2.1.0',
 
 ]
