@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/item_padding_end">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvCircularImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/item_cardview_margin_top"
+        android:layout_marginStart="@dimen/button_margin"
+        android:layout_marginEnd="@dimen/button_margin"
+        card_view:cardCornerRadius="@dimen/img_cv_radius"
+        card_view:cardPreventCornerOverlap="false">
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="@dimen/img_profile_dimen"
+            android:layout_height="@dimen/img_profile_dimen" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvItemAuthor"
+        style="@style/ItemAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/item_margin_top"
+        android:layout_marginBottom="@dimen/item_header_margin_bottom"
+        android:layout_toEndOf="@+id/cvCircularImage"
+        tools:text="@string/app_name" />
+
+
+    <TextView
+        android:id="@+id/tvItemHeader"
+        style="@style/ItemHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvItemAuthor"
+        android:layout_marginBottom="@dimen/item_margin_bottom"
+        android:layout_toEndOf="@+id/cvCircularImage"
+        tools:text="@string/app_name" />
+
+    <RelativeLayout
+        android:id="@+id/rlExpandedView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvItemHeader"
+        android:layout_marginBottom="@dimen/item_header_margin_bottom"
+        android:layout_toEndOf="@+id/cvCircularImage"
+        android:animateLayoutChanges="true"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvItemDesc"
+            style="@style/ItemDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/item_desc_margin_bottom"
+            tools:text="@string/app_name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvItemDesc"
+            android:layout_marginBottom="@dimen/item_header_margin_bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvLanguage"
+                style="@style/ItemInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/filled_circle"
+                android:drawablePadding="@dimen/drawable_padding"
+                android:text="@string/app_name" />
+
+            <TextView
+                android:id="@+id/tvStars"
+                style="@style/ItemInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/item_info_margin_start"
+                android:drawableStart="@drawable/star_yellow_16"
+                android:drawablePadding="@dimen/drawable_padding"
+                android:text="@string/app_name" />
+
+            <TextView
+                android:id="@+id/tvForks"
+                style="@style/ItemInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/item_info_margin_start"
+                android:drawableStart="@drawable/fork_black_16"
+                android:drawablePadding="@dimen/drawable_padding"
+                android:text="@string/app_name" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_alignParentBottom="true"
+        android:background="@color/divider" />
+</RelativeLayout>

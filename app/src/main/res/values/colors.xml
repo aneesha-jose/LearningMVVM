@@ -14,5 +14,6 @@
     <color name="error_description">#929292</color>
     <color name="general_text">#52575C</color>
     <color name="title_text">#25282B</color>
+    <color name="shimmerBackground">#dddddd</color>
 
 </resources>
