@@ -10,15 +10,15 @@ import kotlinx.android.parcel.Parcelize
  * The Repository object with relevant information about it.
  */
 @Parcelize
-@Entity(tableName = TABLE_REPOSITORY)
+@Entity(tableName = TABLE_REPOSITORY, primaryKeys = ["author", "name"])
 data class Repo(
-    val author: String?,
-    val name: String?,
+    val author: String = "",
+    val name: String = "",
     val avatar: String?,
     val description: String?,
     val language: String?,
     val languageColor: String?,
     val stars: Long?,
     val forks: Long?,
-    val createdDate: Long = System.currentTimeMillis()
+    var createdDate: Long? = System.currentTimeMillis()
 ) : Parcelable
