@@ -13,11 +13,3 @@ annotation class ApplicationScope
 @Retention(AnnotationRetention.BINARY)
 @Scope
 annotation class ActivityScope
-
-@Retention(AnnotationRetention.BINARY)
-@Scope
-annotation class BaseActivityScope
-
-@Retention(AnnotationRetention.BINARY)
-@Scope
-annotation class FragmentScope
