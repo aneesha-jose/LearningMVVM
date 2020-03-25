@@ -4,19 +4,17 @@ import com.aneeshajose.trending.network.ApiCallTag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 /**
  * Created by Aneesha Jose on 2020-03-22.
  * A class that holds utility functions that aid in making network calls easier
  */
+val apiCallTracker = mutableListOf<String>()
 
-/**
- *
- */
 fun <T> makeNetworkCall(
     call: Call<T>,
     @ApiCallTag apiCallTag: String,
@@ -24,10 +22,11 @@ fun <T> makeNetworkCall(
     onFailure: NetworkResponse<String>,
     onError: NetworkResponse<Throwable>? = null
 ) {
+    apiCallTracker.add(apiCallTag)
     GlobalScope.launch(Dispatchers.IO) {
         call.enqueue(object : Callback<T> {
-
             override fun onResponse(call: Call<T>, response: Response<T>) {
+                apiCallTracker.remove(apiCallTag)
                 if (response.isSuccessful) {
                     onSuccess.onNetworkResponse(response.body(), apiCallTag)
                 } else {
@@ -36,6 +35,7 @@ fun <T> makeNetworkCall(
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
+                apiCallTracker.remove(apiCallTag)
                 onError?.onNetworkResponse(t, apiCallTag)
             }
 
