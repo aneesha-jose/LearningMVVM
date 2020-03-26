@@ -112,6 +112,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnRetry)
     public void retry() {
+        rlErrorLayout.setVisibility(View.GONE);
         handleRetryClick();
     }
 
