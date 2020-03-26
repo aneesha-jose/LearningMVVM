@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
 import com.aneeshajose.genericadapters.model.AbstractBetterViewHolder;
@@ -53,7 +52,7 @@ public class VH_Repo extends AbstractBetterViewHolder<Repo> {
     TextView tvForks;
 
     private RequestManager glide;
-    public static final int LAYOUT = R.layout.item_repo;
+    static final int LAYOUT = R.layout.item_repo;
 
     VH_Repo(View view, RequestManager glide) {
         super(view);
@@ -75,9 +74,11 @@ public class VH_Repo extends AbstractBetterViewHolder<Repo> {
         tvForks.setText(NumberFormat.getNumberInstance(Locale.getDefault()).format(element.getForks()));
 
         tvLanguage.setText(element.getLanguage());
-        Drawable drawable = ContextCompat.getDrawable(itemView.getContext(), R.drawable.filled_circle);
-        if (drawable != null && !TextUtils.isEmpty(element.getLanguageColor()))
-            tvLanguage.setCompoundDrawables(ActivityUtilsKt.setTint(drawable, Color.parseColor(element.getLanguageColor())), null, null, null);
+        if (!TextUtils.isEmpty(element.getLanguageColor())) {
+            Drawable drawable = ActivityUtilsKt.setColourForDrawable(itemView.getContext(), R.drawable.filled_circle, Color.parseColor(element.getLanguageColor()));
+            if (drawable != null)
+                tvLanguage.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        }
     }
 
     void setSelectionIndicator(boolean isSelected) {

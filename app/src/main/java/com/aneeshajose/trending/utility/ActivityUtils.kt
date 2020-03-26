@@ -1,8 +1,11 @@
 package com.aneeshajose.trending.utility
 
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
-import androidx.core.graphics.drawable.DrawableCompat
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
@@ -22,9 +25,9 @@ fun getDataSourceRepositoryFromApp(app: App): DataSourceRepository {
     return app.component.getDataSourceRepository()
 }
 
-fun setTint(d: Drawable, color: Int): Drawable {
-    val wrappedDrawable = DrawableCompat.wrap(d)
-    DrawableCompat.setTint(wrappedDrawable, color)
+fun setColourForDrawable(context: Context, @DrawableRes icon: Int, color: Int): Drawable? {
+    val wrappedDrawable = ContextCompat.getDrawable(context, icon)?.mutate()
+    wrappedDrawable?.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     return wrappedDrawable
 }
 
