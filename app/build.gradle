@@ -94,5 +94,6 @@ dependencies {
     androidTestImplementation "io.mockk:mockk-android:$versions.mockK"
     testImplementation "io.mockk:mockk:$versions.mockK"
     testImplementation "org.robolectric:robolectric:$versions.robolectric"
+    testImplementation "com.squareup.retrofit2:retrofit-mock:$versions.retrofit"
 
 }

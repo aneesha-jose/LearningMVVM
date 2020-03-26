@@ -40,6 +40,6 @@ ext.versions = [
         archVersion       : '2.1.0',
         mockK             : '1.9',
         robolectric       : '4.3.1',
-        restMock          : '0.4.1'
+        restMock          : '0.4.1',
 
 ]
