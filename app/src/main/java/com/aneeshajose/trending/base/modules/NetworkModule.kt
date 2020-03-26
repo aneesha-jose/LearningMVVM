@@ -1,6 +1,7 @@
 package com.aneeshajose.trending.base.modules
 
 import com.aneeshajose.trending.BuildConfig
+import com.aneeshajose.trending.base.qualifiers.BaseUrl
 import com.aneeshajose.trending.base.scopes.ApplicationScope
 import com.aneeshajose.trending.network.ApiService
 import com.aneeshajose.trending.network.RestClient
@@ -15,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by Aneesha Jose on 2020-03-24.
  */
 @Module
-class NetworkModule {
+class NetworkModule(val providedBaseUrl: String) {
 
     @ApplicationScope
     @Provides
@@ -47,6 +48,13 @@ class NetworkModule {
     @Provides
     fun getApiService(restClient: RestClient): ApiService {
         return restClient.createApiService()
+    }
+
+    @ApplicationScope
+    @Provides
+    @BaseUrl
+    fun getBaseUrl(): String {
+        return providedBaseUrl
     }
 
 }

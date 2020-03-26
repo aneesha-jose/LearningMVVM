@@ -86,8 +86,12 @@ dependencies {
     implementation "androidx.concurrent:concurrent-futures-ktx:$versions.futures"
 
     //Testing
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testImplementation "androidx.arch.core:core-testing:$versions.archVersion"
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation("com.squareup.okhttp3:mockwebserver:$versions.mockwebserver")
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
+    testImplementation "org.robolectric:robolectric:$versions.robolectric"
+
 }

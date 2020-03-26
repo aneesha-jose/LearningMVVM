@@ -38,5 +38,8 @@ ext.versions = [
 
         //Testing
         archVersion       : '2.1.0',
+        mockito           : '3.3.3',
+        robolectric       : '4.3.1',
+        mockwebserver     : '4.4.0'
 
 ]

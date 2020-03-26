@@ -1,5 +1,6 @@
 package com.aneeshajose.trending.network
 
+import com.aneeshajose.trending.base.qualifiers.BaseUrl
 import com.aneeshajose.trending.base.scopes.ApplicationScope
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -12,12 +13,13 @@ import javax.inject.Inject
 @ApplicationScope
 class RestClient @Inject constructor(
     client: OkHttpClient,
-    gsonConverterFactory: GsonConverterFactory
+    gsonConverterFactory: GsonConverterFactory,
+    @BaseUrl baseUrl: String
 ) {
 
     private val retrofit: Retrofit = Retrofit.Builder()
         .client(client)
-        .baseUrl(BASE_URL)
+        .baseUrl(baseUrl)
         .addConverterFactory(gsonConverterFactory)
         .build()
 

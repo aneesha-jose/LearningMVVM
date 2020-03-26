@@ -14,3 +14,7 @@ annotation class ApplicationContext
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
 annotation class ActivityContext
+
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class BaseUrl

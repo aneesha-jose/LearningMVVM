@@ -3,6 +3,8 @@ package com.aneeshajose.trending.base;
 import android.app.Application;
 
 import com.aneeshajose.trending.base.modules.AppModule;
+import com.aneeshajose.trending.base.modules.NetworkModule;
+import com.aneeshajose.trending.network.NetworkConstantsKt;
 
 /**
  * Created by yashThakur on 01/03/16.
@@ -21,6 +23,7 @@ public class App extends Application {
     public void buildAppComponent() {
         component = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
+                .networkModule(new NetworkModule(NetworkConstantsKt.BASE_URL))
                 .build();
     }
 
