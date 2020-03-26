@@ -11,7 +11,7 @@ import com.aneeshajose.trending.network.NetworkConstantsKt;
  */
 public class App extends Application {
 
-    private AppComponent component;
+    protected AppComponent component;
 
     @Override
     public void onCreate() {

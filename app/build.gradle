@@ -13,7 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.aneeshajose.trending.base.MockTestRunner"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -90,8 +90,9 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$versions.archVersion"
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    testImplementation("com.squareup.okhttp3:mockwebserver:$versions.mockwebserver")
-    testImplementation "org.mockito:mockito-core:$versions.mockito"
+    androidTestImplementation "com.github.andrzejchm.RESTMock:android:$versions.restMock"
+    androidTestImplementation "io.mockk:mockk-android:$versions.mockK"
+    testImplementation "io.mockk:mockk:$versions.mockK"
     testImplementation "org.robolectric:robolectric:$versions.robolectric"
 
 }
