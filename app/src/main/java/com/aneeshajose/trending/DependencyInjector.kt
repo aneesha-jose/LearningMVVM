@@ -2,6 +2,7 @@ package com.aneeshajose.trending
 
 import android.content.Context
 import com.aneeshajose.trending.base.AppComponent
+import com.aneeshajose.trending.base.CoroutineContextProvider
 import com.aneeshajose.trending.base.activity.ActivityModule
 import com.aneeshajose.trending.base.qualifiers.ActivityContext
 import com.aneeshajose.trending.base.qualifiers.ApplicationContext
@@ -34,6 +35,7 @@ interface DependencyInjector {
 
     fun glideRequestManager(): RequestManager
 
+    fun coroutineContext(): CoroutineContextProvider
 
     fun injectDependencies(activity: DisplayTrendingReposActivity)
 }

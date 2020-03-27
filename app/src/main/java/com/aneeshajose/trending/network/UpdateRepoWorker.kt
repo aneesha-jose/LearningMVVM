@@ -25,21 +25,21 @@ class UpdateRepoWorker(val context: Context, params: WorkerParameters) :
 
     }
 
-    private fun work(futureResult : CallbackToFutureAdapter.Completer<Result>) {
+    private fun work(futureResult: CallbackToFutureAdapter.Completer<Result>) {
         if (apiCallTracker.contains(FETCH_REPOSITORIES)) {
             futureResult.set(Result.success())
             return
         }
-        val api = (context.applicationContext as App).component.getApiService()
-        val dataSourceRepository =
-            (context.applicationContext as App).component.getDataSourceRepository()
+        val component = (context.applicationContext as App).component
         makeNetworkCall(
-            api.fetchRepositories(), FETCH_REPOSITORIES,
+            component.getApiService().fetchRepositories(),
+            FETCH_REPOSITORIES,
+            component.coroutineContext(),
             onSuccess = object : NetworkResponse<List<Repo?>?> {
                 override fun onNetworkResponse(t: List<Repo?>?, callTag: String) {
                     val data = t?.filterNotNull()
                     if (data?.isNotEmpty() == true) {
-                        dataSourceRepository.saveInLocalDb(data)
+                        component.getDataSourceRepository().saveInLocalDb(data)
                         futureResult.set(Result.success())
                     }
                 }

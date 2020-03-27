@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aneeshajose.trending.R
+import com.aneeshajose.trending.base.CoroutineContextProvider
 import com.aneeshajose.trending.base.qualifiers.ApplicationContext
 import com.aneeshajose.trending.base.scopes.ApplicationScope
 import com.aneeshajose.trending.localdata.LocalDataSource
@@ -13,8 +14,8 @@ import com.aneeshajose.trending.network.utils.NetworkResponse
 import com.aneeshajose.trending.network.utils.apiCallTracker
 import com.aneeshajose.trending.network.utils.makeNetworkCall
 import com.aneeshajose.trending.utility.scheduleUpdateRepoWorker
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,6 +26,7 @@ import javax.inject.Inject
 @ApplicationScope
 class DataSourceRepository @Inject constructor(
     @ApplicationContext val context: Context,
+    private val coroutineContextProvider: CoroutineContextProvider,
     private val apiService: ApiService,
     private val localDataSource: LocalDataSource
 ) {
@@ -39,7 +41,9 @@ class DataSourceRepository @Inject constructor(
         liveData: MutableLiveData<ResponseWrapper<List<Repo>>>,
         isForceFetch: Boolean
     ) {
-        makeNetworkCall(apiService.fetchRepositories(), FETCH_REPOSITORIES,
+        makeNetworkCall(apiService.fetchRepositories(),
+            FETCH_REPOSITORIES,
+            coroutineContextProvider,
             onSuccess = object : NetworkResponse<List<Repo?>?> {
                 override fun onNetworkResponse(t: List<Repo?>?, callTag: String) {
                     var data = t?.filterNotNull()
@@ -86,16 +90,23 @@ class DataSourceRepository @Inject constructor(
     }
 
     private fun getRepositoriesFromLocalData(liveData: MutableLiveData<ResponseWrapper<List<Repo>>>) {
-        GlobalScope.launch {
+        CoroutineScope(coroutineContextProvider.IO).launch {
             val localData = withContext(Dispatchers.Default) {
                 localDataSource.getValidRepos()
             }
-            if (localData.isNotEmpty()) liveData.postValue(ResponseWrapper(localData))
+            if (localData.isNotEmpty() || liveData.value == null)
+                launch(coroutineContextProvider.Main) {
+                    liveData.postValue(
+                        ResponseWrapper(
+                            localData
+                        )
+                    )
+                }
         }
     }
 
     fun saveInLocalDb(repos: List<Repo>) {
-        GlobalScope.launch {
+        CoroutineScope(coroutineContextProvider.IO).launch {
             localDataSource.refreshRepositoriesData(repos)
             scheduleUpdateRepoWorker(context)
         }

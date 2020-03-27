@@ -1,8 +1,8 @@
 package com.aneeshajose.trending.network.utils
 
+import com.aneeshajose.trending.base.CoroutineContextProvider
 import com.aneeshajose.trending.network.ApiCallTag
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,25 +18,30 @@ val apiCallTracker = mutableListOf<String>()
 fun <T> makeNetworkCall(
     call: Call<T>,
     @ApiCallTag apiCallTag: String,
+    coroutineContext: CoroutineContextProvider,
     onSuccess: NetworkResponse<T>,
     onFailure: NetworkResponse<String>,
     onError: NetworkResponse<Throwable>? = null
 ) {
     apiCallTracker.add(apiCallTag)
-    GlobalScope.launch(Dispatchers.IO) {
+    CoroutineScope(coroutineContext.IO).launch {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 apiCallTracker.remove(apiCallTag)
-                if (response.isSuccessful) {
-                    onSuccess.onNetworkResponse(response.body(), apiCallTag)
-                } else {
-                    onFailure.onNetworkResponse(response.message(), apiCallTag)
+                launch(coroutineContext.Main) {
+                    if (response.isSuccessful) {
+                        onSuccess.onNetworkResponse(response.body(), apiCallTag)
+                    } else {
+                        onFailure.onNetworkResponse(response.message(), apiCallTag)
+                    }
                 }
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 apiCallTracker.remove(apiCallTag)
-                onError?.onNetworkResponse(t, apiCallTag)
+                launch(coroutineContext.Main) {
+                    onError?.onNetworkResponse(t, apiCallTag)
+                }
             }
 
         })

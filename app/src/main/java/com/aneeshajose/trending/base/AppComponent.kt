@@ -28,5 +28,7 @@ interface AppComponent {
 
     fun getDataSourceRepository(): DataSourceRepository
 
-    fun glideRequestManager() : RequestManager
+    fun glideRequestManager(): RequestManager
+
+    fun coroutineContext(): CoroutineContextProvider
 }
