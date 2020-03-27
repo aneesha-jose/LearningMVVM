@@ -21,4 +21,13 @@ data class Repo(
     val stars: Long?,
     val forks: Long?,
     var createdDate: Long? = System.currentTimeMillis()
-) : Parcelable
+) : Parcelable {
+
+    override fun equals(other: Any?): Boolean {
+        return other is Repo && other.name == name && other.author == author
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+}

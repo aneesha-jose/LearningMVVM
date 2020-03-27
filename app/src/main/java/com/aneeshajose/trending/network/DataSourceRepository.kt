@@ -31,9 +31,9 @@ class DataSourceRepository @Inject constructor(
 ) {
 
     fun getRepository(liveData: MutableLiveData<ResponseWrapper<List<Repo>>>) {
+        getRepositoriesFromLocalData(liveData)
         if (!apiCallTracker.contains(FETCH_REPOSITORIES))
             getRepositoriesFromServer(liveData, false)
-        getRepositoriesFromLocalData(liveData)
     }
 
     fun getRepositoriesFromServer(
@@ -46,10 +46,10 @@ class DataSourceRepository @Inject constructor(
             onSuccess = object : NetworkResponse<List<Repo?>?> {
                 override fun onNetworkResponse(t: List<Repo?>?, callTag: String) {
                     var data = t?.filterNotNull()
-                    when {
-                        data?.isNotEmpty() == true -> saveInLocalDb(data)
-                        //to handle retention of local data in case of not force fetching data
-                        !isForceFetch && liveData.value?.body != null -> data = liveData.value?.body
+                    if (data?.isNotEmpty() == true) {
+                        saveInLocalDb(data)
+                    } else if (!isForceFetch && liveData.value?.body != null) {
+                        data = liveData.value?.body
                     }
                     liveData.postValue(ResponseWrapper(data))
                 }
@@ -93,14 +93,12 @@ class DataSourceRepository @Inject constructor(
             val localData = withContext(coroutineContextProvider.IO) {
                 localDataSource.getValidRepos()
             }
-            if (localData.isNotEmpty() || liveData.value == null)
-                launch(coroutineContextProvider.Main) {
-                    liveData.postValue(
-                        ResponseWrapper(
-                            localData
-                        )
+            if (localData.isNotEmpty() || liveData.value?.hasNoData() == true)
+                liveData.postValue(
+                    ResponseWrapper(
+                        localData
                     )
-                }
+                )
         }
     }
 

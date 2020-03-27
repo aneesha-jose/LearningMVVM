@@ -6,4 +6,9 @@ package com.aneeshajose.trending.models
 data class ResponseWrapper<T>(
     val body: T? = null,
     val msg: String? = null,
-    val throwable: Throwable? = null)
+    val throwable: Throwable? = null
+) {
+    fun hasNoData(): Boolean {
+        return body == null && msg == null && throwable == null
+    }
+}

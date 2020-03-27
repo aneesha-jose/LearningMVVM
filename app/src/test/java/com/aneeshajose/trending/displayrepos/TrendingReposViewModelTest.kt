@@ -1,9 +1,9 @@
-package com.aneeshajose.trending.network
+package com.aneeshajose.trending.displayrepos
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.aneeshajose.trending.assets.repo_succes_json_unit
@@ -12,27 +12,29 @@ import com.aneeshajose.trending.base.TestCoroutineRule
 import com.aneeshajose.trending.localdata.LocalDataSource
 import com.aneeshajose.trending.models.Repo
 import com.aneeshajose.trending.models.ResponseWrapper
+import com.aneeshajose.trending.network.ApiService
+import com.aneeshajose.trending.network.DataSourceRepository
 import com.aneeshajose.trending.utility.scheduleUpdateRepoWorker
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.test.runBlockingTest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import retrofit2.Response
 import retrofit2.mock.Calls
 
+
 /**
- * Created by Aneesha Jose on 2020-03-27.
+ * Created by Aneesha Jose on 2020-03-26.
  */
 @RunWith(AndroidJUnit4::class)
-class DataSourceRepositoryTest {
+class TrendingReposViewModelTest {
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -45,11 +47,13 @@ class DataSourceRepositoryTest {
         object : TypeToken<List<Repo?>>() {}.type
     )
 
-    private val context = ApplicationProvider.getApplicationContext<Context>()
-
     private val coroutineProvider = TestCoroutineContextProvider()
 
-    lateinit var dataSourceRepository: DataSourceRepository
+    private val context = ApplicationProvider.getApplicationContext<Context>()
+
+    private lateinit var viewModel: TrendingReposViewModel
+
+    lateinit var dataSourceRepo: DataSourceRepository
 
     @MockK
     lateinit var localDataSource: LocalDataSource
@@ -58,35 +62,45 @@ class DataSourceRepositoryTest {
     lateinit var apiService: ApiService
 
     @MockK
-    lateinit var observer: Observer<ResponseWrapper<List<Repo>>>
+    lateinit var handle: SavedStateHandle
 
-    private val testLiveData = MutableLiveData<ResponseWrapper<List<Repo>>>()
+    @MockK
+    lateinit var observer: Observer<ResponseWrapper<List<Repo>>>
 
     @Before
     @Throws(Exception::class)
     fun setUp() {
         MockKAnnotations.init(this)
-        dataSourceRepository =
-            DataSourceRepository(context, coroutineProvider, apiService, localDataSource)
+        dataSourceRepo = DataSourceRepository(
+            context,
+            coroutineProvider,
+            apiService,
+            localDataSource
+        )
+        viewModel = TrendingReposViewModel(dataSourceRepo, handle)
         mockkStatic("com.aneeshajose.trending.utility.ActivityUtilsKt")
         every { scheduleUpdateRepoWorker(any()) } returns Unit
     }
 
     @Test
-    fun test_EmptyData() {
+    fun test_dataReturnsNull() {
         coroutineTestRule.runBlockingTest {
+            coEvery { localDataSource.getValidRepos() }.coAnswers { emptyList() }
+            val failureMessage = "Not Found"
+            val okhttpResponse = mockkClass(Response::class, relaxed = true)
+            every { okhttpResponse.message } returns failureMessage
             every { apiService.fetchRepositories() } answers {
                 Calls.response(
-                    Response.success(
-                        emptyList()
+                    retrofit2.Response.error(
+                        failureMessage.toResponseBody("application/json".toMediaTypeOrNull()),
+                        okhttpResponse
                     )
                 )
             }
-            coEvery { localDataSource.getValidRepos() } coAnswers { emptyList() }
-            dataSourceRepository.getRepository(testLiveData)
-            assertThat(testLiveData.hasActiveObservers()).isTrue()
-            assertThat(testLiveData.hasObservers()).isTrue()
-            assertThat(testLiveData.value?.body).isEmpty()
+            val liveData = viewModel.getRepos()
+            assertThat(liveData.value).isNotNull()
+            assertThat(liveData.value?.body).isNull()
+            assertThat(liveData.value?.msg).isSameAs(failureMessage)
         }
     }
 
@@ -94,11 +108,11 @@ class DataSourceRepositoryTest {
     fun test_DbDataPresent_FailedServerCall() {
         coroutineTestRule.runBlockingTest {
             val failureMessage = "Not Found"
-            val okhttpResponse = mockkClass(okhttp3.Response::class, relaxed = true)
+            val okhttpResponse = mockkClass(Response::class, relaxed = true)
             every { okhttpResponse.message } returns failureMessage
             every { apiService.fetchRepositories() } answers {
                 Calls.response(
-                    Response.error(
+                    retrofit2.Response.error(
                         failureMessage.toResponseBody("application/json".toMediaTypeOrNull()),
                         okhttpResponse
                     )
@@ -106,9 +120,9 @@ class DataSourceRepositoryTest {
             }
             val dbResponse = response.filterNotNull()
             coEvery { localDataSource.getValidRepos() } coAnswers { dbResponse }
-            dataSourceRepository.getRepository(testLiveData)
-            assertThat(testLiveData.value?.body).isNotEmpty()
-            assertThat(testLiveData.value?.body).isSameAs(dbResponse)
+            val liveData = viewModel.getRepos()
+            assertThat(liveData.value?.body).isNotEmpty()
+            assertThat(liveData.value?.body).isSameAs(dbResponse)
         }
     }
 
@@ -117,22 +131,16 @@ class DataSourceRepositoryTest {
         coroutineTestRule.runBlockingTest {
             every { apiService.fetchRepositories() } answers {
                 Calls.response(
-                    Response.success(
+                    retrofit2.Response.success(
                         response
                     )
                 )
             }
             coEvery { localDataSource.getValidRepos() } coAnswers { emptyList() }
             coEvery { localDataSource.refreshRepositoriesData(any()) } coAnswers {}
-            dataSourceRepository.getRepository(testLiveData)
-            assertThat(testLiveData.value?.body).isNotEmpty()
-            assertThat(testLiveData.value?.body).isEqualTo(response)
-            val slot = CapturingSlot<List<Repo>>()
-            verify { dataSourceRepository.saveInLocalDb(capture(slot)) }
-            assertThat(slot.captured).isEqualTo(response)
-            slot.clear()
-            verify { runBlockingTest { localDataSource.refreshRepositoriesData(capture(slot)) } }
-            assertThat(slot.captured).isEqualTo(response)
+            val liveData = viewModel.getRepos()
+            assertThat(liveData.value?.body).isNotEmpty()
+            assertThat(liveData.value?.body).isEqualTo(response)
         }
     }
 
@@ -143,22 +151,18 @@ class DataSourceRepositoryTest {
             val serverData = response.subList(response.size / 2, response.size)
             every { apiService.fetchRepositories() } answers {
                 Calls.response(
-                    Response.success(
+                    retrofit2.Response.success(
                         serverData
                     )
                 )
             }
             coEvery { localDataSource.getValidRepos() } coAnswers { dbData }
             coEvery { localDataSource.refreshRepositoriesData(any()) } coAnswers {}
-            dataSourceRepository.getRepository(testLiveData)
-            assertThat(testLiveData.value?.body).isNotEmpty()
-            assertThat(testLiveData.value?.body).isEqualTo(serverData)
-            val slot = CapturingSlot<List<Repo>>()
-            verify { dataSourceRepository.saveInLocalDb(capture(slot)) }
-            assertThat(slot.captured).isEqualTo(serverData)
-            slot.clear()
-            verify { runBlockingTest { localDataSource.refreshRepositoriesData(capture(slot)) } }
-            assertThat(slot.captured).isEqualTo(serverData)
+            val liveData = viewModel.getRepos()
+            assertThat(liveData.value?.body).isNotEmpty()
+            assertThat(liveData.value?.body).isEqualTo(serverData)
         }
     }
+
+
 }

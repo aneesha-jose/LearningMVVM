@@ -28,20 +28,16 @@ fun <T> makeNetworkCall(
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 apiCallTracker.remove(apiCallTag)
-                launch(coroutineContext.Main) {
-                    if (response.isSuccessful) {
-                        onSuccess.onNetworkResponse(response.body(), apiCallTag)
-                    } else {
-                        onFailure.onNetworkResponse(response.message(), apiCallTag)
-                    }
+                if (response.isSuccessful) {
+                    onSuccess.onNetworkResponse(response.body(), apiCallTag)
+                } else {
+                    onFailure.onNetworkResponse(response.message(), apiCallTag)
                 }
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 apiCallTracker.remove(apiCallTag)
-                launch(coroutineContext.Main) {
-                    onError?.onNetworkResponse(t, apiCallTag)
-                }
+                onError?.onNetworkResponse(t, apiCallTag)
             }
 
         })
