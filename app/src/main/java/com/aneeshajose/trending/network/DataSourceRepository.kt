@@ -15,7 +15,6 @@ import com.aneeshajose.trending.network.utils.apiCallTracker
 import com.aneeshajose.trending.network.utils.makeNetworkCall
 import com.aneeshajose.trending.utility.scheduleUpdateRepoWorker
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -50,7 +49,7 @@ class DataSourceRepository @Inject constructor(
                     when {
                         data?.isNotEmpty() == true -> saveInLocalDb(data)
                         //to handle retention of local data in case of not force fetching data
-                        !isForceFetch -> data = liveData.value?.body
+                        !isForceFetch && liveData.value?.body != null -> data = liveData.value?.body
                     }
                     liveData.postValue(ResponseWrapper(data))
                 }
@@ -91,7 +90,7 @@ class DataSourceRepository @Inject constructor(
 
     private fun getRepositoriesFromLocalData(liveData: MutableLiveData<ResponseWrapper<List<Repo>>>) {
         CoroutineScope(coroutineContextProvider.IO).launch {
-            val localData = withContext(Dispatchers.Default) {
+            val localData = withContext(coroutineContextProvider.IO) {
                 localDataSource.getValidRepos()
             }
             if (localData.isNotEmpty() || liveData.value == null)

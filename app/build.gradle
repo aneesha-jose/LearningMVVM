@@ -19,6 +19,10 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+        useLibrary 'android.test.runner'
+        useLibrary 'android.test.base'
+        useLibrary 'android.test.mock'
     }
     buildTypes {
         release {
@@ -30,6 +34,11 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true
     }
 }
 
@@ -88,12 +97,23 @@ dependencies {
     //Testing
     testImplementation 'junit:junit:4.13'
     testImplementation "androidx.arch.core:core-testing:$versions.archVersion"
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation "io.mockk:mockk:$versions.mockK"
+    testImplementation "com.squareup.retrofit2:retrofit-mock:$versions.retrofit"
+    testImplementation "androidx.test:runner:$versions.testRunner"
+    testImplementation "androidx.test.espresso:espresso-core:$versions.espressoCore"
+    testImplementation "androidx.test.ext:junit:$versions.jUnit"
+    testImplementation "androidx.test:core:$versions.testCore"
+    testImplementation "androidx.test.ext:truth:$versions.truth"
+    testImplementation "org.robolectric:robolectric:$versions.robolectric"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesVersion"
+
+    androidTestImplementation "androidx.test:runner:$versions.testRunner"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espressoCore"
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation "androidx.test:core:$versions.testCore"
+    androidTestImplementation "androidx.test.ext:truth:$versions.truth"
+    androidTestImplementation "androidx.test.ext:junit:$versions.jUnit"
     androidTestImplementation "com.github.andrzejchm.RESTMock:android:$versions.restMock"
     androidTestImplementation "io.mockk:mockk-android:$versions.mockK"
-    testImplementation "io.mockk:mockk:$versions.mockK"
-    testImplementation "org.robolectric:robolectric:$versions.robolectric"
-    testImplementation "com.squareup.retrofit2:retrofit-mock:$versions.retrofit"
 
 }
