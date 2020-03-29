@@ -22,4 +22,4 @@ Open in android studio and run the app module to run the actual application.
 
 Method 2 : (Needs adb and gradlew to run)
 Run the command :
-`./gradlew (gradlew for windows) app:build` to build applicatiom
+`./gradlew (gradlew for windows) app:build` to build application
