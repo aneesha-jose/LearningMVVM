@@ -14,6 +14,7 @@ android {
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "com.aneeshajose.trending.base.MockTestRunner"
+        multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -94,6 +95,8 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:$versions.work"
     implementation "androidx.concurrent:concurrent-futures-ktx:$versions.futures"
 
+    implementation "com.android.support:multidex:$versions.multidex"
+
     //Testing
     testImplementation 'junit:junit:4.13'
     testImplementation "androidx.arch.core:core-testing:$versions.archVersion"
@@ -107,13 +110,18 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$versions.robolectric"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesVersion"
 
+    androidTestImplementation "androidx.arch.core:core-testing:$versions.archVersion"
     androidTestImplementation "androidx.test:runner:$versions.testRunner"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espressoCore"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$versions.espressoCore"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$versions.espressoCore"
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$versions.espressoCore"
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation "androidx.test:core:$versions.testCore"
     androidTestImplementation "androidx.test.ext:truth:$versions.truth"
     androidTestImplementation "androidx.test.ext:junit:$versions.jUnit"
     androidTestImplementation "com.github.andrzejchm.RESTMock:android:$versions.restMock"
     androidTestImplementation "io.mockk:mockk-android:$versions.mockK"
+
 
 }

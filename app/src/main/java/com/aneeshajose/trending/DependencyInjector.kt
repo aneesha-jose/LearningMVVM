@@ -11,6 +11,7 @@ import com.aneeshajose.trending.displayrepos.DisplayTrendingReposActivity
 import com.aneeshajose.trending.localdata.LocalDataSource
 import com.aneeshajose.trending.network.ApiService
 import com.aneeshajose.trending.network.DataSourceRepository
+import com.aneeshajose.trending.splash.SplashActivity
 import com.bumptech.glide.RequestManager
 import dagger.Component
 
@@ -37,5 +38,6 @@ interface DependencyInjector {
 
     fun coroutineContext(): CoroutineContextProvider
 
+    fun injectDependencies(activity: SplashActivity)
     fun injectDependencies(activity: DisplayTrendingReposActivity)
 }

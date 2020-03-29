@@ -36,6 +36,8 @@ ext.versions = [
         work              : '2.3.4',
         futures           : '1.1.0-alpha01',
 
+        multidex          : '1.0.3',
+
         //Testing
         archVersion       : '2.1.0',
         mockK             : '1.9',

@@ -1,0 +1,83 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "220bf4032b0053432cca03dc3ff15a96",
+    "entities": [
+      {
+        "tableName": "Repository",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`author` TEXT NOT NULL, `name` TEXT NOT NULL, `avatar` TEXT, `description` TEXT, `language` TEXT, `languageColor` TEXT, `stars` INTEGER, `forks` INTEGER, `createdDate` INTEGER, PRIMARY KEY(`author`, `name`))",
+        "fields": [
+          {
+            "fieldPath": "author",
+            "columnName": "author",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avatar",
+            "columnName": "avatar",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "languageColor",
+            "columnName": "languageColor",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stars",
+            "columnName": "stars",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "forks",
+            "columnName": "forks",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdDate",
+            "columnName": "createdDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "author",
+            "name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '220bf4032b0053432cca03dc3ff15a96')"
+    ]
+  }
+}
