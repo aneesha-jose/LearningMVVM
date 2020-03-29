@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.aneeshajose.trending.assets.repo_succes_json_unit
+import com.aneeshajose.trending.assets.repo_success_json_unit
 import com.aneeshajose.trending.base.TestCoroutineContextProvider
 import com.aneeshajose.trending.base.TestCoroutineRule
 import com.aneeshajose.trending.localdata.LocalDataSource
@@ -41,7 +41,7 @@ class DataSourceRepositoryTest {
     val coroutineTestRule = TestCoroutineRule()
 
     private val response: List<Repo?> = Gson().fromJson<List<Repo?>>(
-        repo_succes_json_unit,
+        repo_success_json_unit,
         object : TypeToken<List<Repo?>>() {}.type
     )
 

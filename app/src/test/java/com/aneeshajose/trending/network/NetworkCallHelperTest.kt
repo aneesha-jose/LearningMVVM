@@ -1,6 +1,6 @@
 package com.aneeshajose.trending.network
 
-import com.aneeshajose.trending.assets.repo_succes_json_unit
+import com.aneeshajose.trending.assets.repo_success_json_unit
 import com.aneeshajose.trending.base.TestCoroutineContextProvider
 import com.aneeshajose.trending.base.TestCoroutineRule
 import com.aneeshajose.trending.models.Repo
@@ -81,7 +81,7 @@ class NetworkCallHelperTest {
     fun test_dataReturnValidSuccess() {
         val capturedResponse = slot<List<Repo?>>()
         val response = Gson().fromJson<List<Repo?>>(
-            repo_succes_json_unit,
+            repo_success_json_unit,
             object : TypeToken<List<Repo?>>() {}.type
         )
         every { apiService.fetchRepositories() } answers {
