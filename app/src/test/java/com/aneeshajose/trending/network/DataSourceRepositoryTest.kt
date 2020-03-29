@@ -3,7 +3,6 @@ package com.aneeshajose.trending.network
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.aneeshajose.trending.assets.repo_success_json_unit
@@ -57,9 +56,6 @@ class DataSourceRepositoryTest {
     @MockK
     lateinit var apiService: ApiService
 
-    @MockK
-    lateinit var observer: Observer<ResponseWrapper<List<Repo>>>
-
     private val testLiveData = MutableLiveData<ResponseWrapper<List<Repo>>>()
 
     @Before
@@ -84,8 +80,6 @@ class DataSourceRepositoryTest {
             }
             coEvery { localDataSource.getValidRepos() } coAnswers { emptyList() }
             dataSourceRepository.getRepository(testLiveData)
-            assertThat(testLiveData.hasActiveObservers()).isTrue()
-            assertThat(testLiveData.hasObservers()).isTrue()
             assertThat(testLiveData.value?.body).isEmpty()
         }
     }

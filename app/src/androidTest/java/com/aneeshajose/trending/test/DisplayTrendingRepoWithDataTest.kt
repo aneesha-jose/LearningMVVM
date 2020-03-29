@@ -74,7 +74,6 @@ class DisplayTrendingRepoSuccessTest : BaseActivityTest<DisplayTrendingReposActi
         val childView = nthChildOf(withId(R.id.rvRepoList), position)
         Truth.assertThat(childView).isNotNull()
         assertHandlingOfRandomItemInRV(position, childView!!, childItem!!)
-
     }
 
     private fun assertHandlingOfLastItemInRV() {
