@@ -2,16 +2,14 @@ package com.aneeshajose.trending.displayrepos
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.aneeshajose.trending.assets.repo_succes_json_unit
+import com.aneeshajose.trending.assets.repo_success_json_unit
 import com.aneeshajose.trending.base.TestCoroutineContextProvider
 import com.aneeshajose.trending.base.TestCoroutineRule
 import com.aneeshajose.trending.localdata.LocalDataSource
 import com.aneeshajose.trending.models.Repo
-import com.aneeshajose.trending.models.ResponseWrapper
 import com.aneeshajose.trending.network.ApiService
 import com.aneeshajose.trending.network.DataSourceRepository
 import com.aneeshajose.trending.utility.scheduleUpdateRepoWorker
@@ -43,7 +41,7 @@ class TrendingReposViewModelTest {
     val coroutineTestRule = TestCoroutineRule()
 
     private val response: List<Repo?> = Gson().fromJson<List<Repo?>>(
-        repo_succes_json_unit,
+        repo_success_json_unit,
         object : TypeToken<List<Repo?>>() {}.type
     )
 
@@ -63,9 +61,6 @@ class TrendingReposViewModelTest {
 
     @MockK
     lateinit var handle: SavedStateHandle
-
-    @MockK
-    lateinit var observer: Observer<ResponseWrapper<List<Repo>>>
 
     @Before
     @Throws(Exception::class)
@@ -163,6 +158,5 @@ class TrendingReposViewModelTest {
             assertThat(liveData.value?.body).isEqualTo(serverData)
         }
     }
-
 
 }
