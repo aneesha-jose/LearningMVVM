@@ -1,10 +1,9 @@
-Assignment for GOJek
-
-Applicant Name: Aneesha Jose
 App Name: Trending
 Languages Used : Kotlin and Java
 Threading Mechanism : Coroutines
-Additions :: SplashActivity Added
+Artchitecture: MVVM - Live Data, View Model, Dagger 2, RoomDb used to set up the structure.
+
+This app fetches the repos trending on github from a Github API. Works in offline mode. This was made by me to implement MVVM in an actual application while learning the architecture.
 
 Unit Tests written for :
 1. NetworkCallHandler.kt
