@@ -78,7 +78,4 @@
         <item name="android:textStyle">normal</item>
         <item name="android:fontFamily">@font/pingfang_sc_regular</item>
     </style>
-
-
-    <dimen name="item_author_size">12sp</dimen>
 </resources>

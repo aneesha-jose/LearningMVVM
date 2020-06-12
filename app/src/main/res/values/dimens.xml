@@ -34,6 +34,6 @@
     <dimen name="item_header_size">15sp</dimen>
     <dimen name="item_desc_size">12sp</dimen>
     <dimen name="splash_logo_title">50sp</dimen>
-
+    <dimen name="item_author_size">12sp</dimen>
 
 </resources>
